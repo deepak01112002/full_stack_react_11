@@ -11,13 +11,26 @@ function App() {
       image : ""
    })
    const [arr,setArr] = useState(JSON.parse(localStorage.getItem("data")) || [])
+   const [edit,setEdit] = useState(null)
     const handleChange = (e)=>{
             let {name,value} = e.target
             setState({...state,[name] : value})
     } 
    const handleSubmit = (e)=>{
        e.preventDefault()
+       if(edit == null){
        setArr([...arr,state])
+       }else{
+         let d = arr.map((el)=>{
+          if(el.title == edit){
+            return {...el,...state}
+          }else{
+            return el
+          }
+         })
+        setArr(d) 
+        setEdit(null)
+       }
        setState({
         title : "",
         price : "",
@@ -37,6 +50,16 @@ function App() {
        }
        setArr(a)
    }
+   const handleEdit = (T)=>{
+       setEdit(T)
+     arr.forEach(element => {
+        if(element.title == T){
+           setState(element)
+        }
+     });
+    
+
+   }
    let {title,price,des,image} = state
   return (
     <>
@@ -45,8 +68,9 @@ function App() {
           <input type="text" value={price} name='price' placeholder='Price' onChange={handleChange}/>
           <input type="text" value={des} name='des' placeholder='Description' onChange={handleChange}/>
           <input type="text" name='image' value={image} placeholder='Image URL' onChange={handleChange}/>
-          <input type="submit" />
+          <input type="submit" value={edit != null ? "Update" : "Submit"}/>
       </form>
+      
       {
         arr.map((el)=>{
              return (
@@ -55,6 +79,7 @@ function App() {
                      <h2>{el.title}</h2>
                      <p>{el.des} - ₹{el.price}</p>
                      <button onClick={()=>handleDelete(el.title)}>Delete</button>
+                     <button onClick={()=>handleEdit(el.title)}>Edit</button>
                  </div>
              )
         })
