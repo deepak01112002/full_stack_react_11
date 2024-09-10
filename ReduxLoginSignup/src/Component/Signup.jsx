@@ -10,6 +10,7 @@ function Signup() {
     }
     const handleSubmit = (e)=>{
         e.preventDefault()
+        // fetch(`https://mock-server-app2-dll0.onrender.com/user?email=${state.email}`)
         fetch(`https://mock-server-app2-dll0.onrender.com/user`,{
             method : "POST",
             headers : {

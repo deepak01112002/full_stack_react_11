@@ -1,9 +1,11 @@
 
-import {legacy_createStore} from "redux"
+import {legacy_createStore,applyMiddleware} from "redux"
+import {thunk} from "redux-thunk"
 
 let initial = {
     isLogin : false,
     user : null,
+    isPasswordError : false,
     isError : false,
     isLoading : false
 }
@@ -20,8 +22,15 @@ const reducer = (state = initial,{type,payload})=>{
                  ...state,
                  user : payload,
                  isLogin : true,
-                 isLoading : false
+                 isLoading : false,
+                 isPasswordError : false
               }
+            case "PASSWORDERROR" :
+                return{
+                    ...state,
+                    isLoading : false,
+                    isPasswordError : true
+                }  
             case "ERROR" : 
                return {
                   ...state,
@@ -33,15 +42,20 @@ const reducer = (state = initial,{type,payload})=>{
       }
 }
 
-export function fetchapi(deepak,email){
+export const fetchapi = (deepak) => (state)=>{
     deepak({type : "LOADING"})
-    fetch(`https://mock-serll0.onrender.com/user?email=${email}`)
+    fetch(`https://mock-server-app2-dll0.onrender.com/user?email=${state.email}`)
     .then((res)=>{
         return res.json()
     })
     .then((res)=>{
         console.log(res)
-        deepak({type : "SUCCESS", payload : res})
+        if(res.length){
+            deepak({type : "SUCCESS", payload : res})
+        }else{
+            deepak({type : "PASSWORDERROR"})
+        }
+        
     })
     .catch((err)=>{
         console.log(err)
@@ -50,4 +64,4 @@ export function fetchapi(deepak,email){
 }
 
 
-export const store = legacy_createStore(reducer)
+export const store = legacy_createStore(reducer,applyMiddleware(thunk))

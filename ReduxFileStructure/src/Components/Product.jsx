@@ -6,7 +6,8 @@ function Product() {
     const dispatch = useDispatch()
     const {isLoading,isError,data} = useSelector((s)=>s.productReducer)
     useEffect(()=>{
-        FetchData(dispatch)
+        dispatch(FetchData)
+        // FetchData(dispatch)
     },[])
   return (
     <div>

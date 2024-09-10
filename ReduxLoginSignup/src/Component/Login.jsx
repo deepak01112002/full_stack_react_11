@@ -15,7 +15,8 @@ function Login() {
     }
     const handleSubmit = (e)=>{
          e.preventDefault()
-        fetchapi(dispatch,state.email)
+        // fetchapi(dispatch,state.email)
+        dispatch(fetchapi)(state)
     }
   return (
     <div>
