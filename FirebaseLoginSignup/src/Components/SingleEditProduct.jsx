@@ -6,9 +6,6 @@ import { doc, getDoc, getDocs, updateDoc } from 'firebase/firestore';
 import { db } from '../FirebaseFolder/Firebase';
 
 function SingleEditProduct() {
-    // const [title,setTitle] = useState("");
-    // const [price,setPrice] = useState("");
-    // const [img,setImage] = useState("")
     const [state,setState] = useState({
         title : "",
         price : "",

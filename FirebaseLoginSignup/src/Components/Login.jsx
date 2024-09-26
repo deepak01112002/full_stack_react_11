@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { db } from '../FirebaseFolder/Firebase';
+import { db, googleAuth } from '../FirebaseFolder/Firebase';
 import { collection, getDoc, getDocs } from 'firebase/firestore';
+import { google } from '../ReduxFolder/User/UserReducer';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Login() {
     const [email,setEmail] = useState("");
     const [pass,setPass] = useState("")
     const [d,setD] = useState([])
+    const [user,setUser] = useState(null)
     const UserCollection = collection(db,"users")
+    const dispatch  = useDispatch()
+    const state = useSelector((s)=>s.UserReducer)
+    console.log(state)
     useEffect(()=>{
         async function getData(){
             let data = await getDocs(UserCollection)
@@ -28,6 +34,11 @@ function Login() {
             alert("Login Unsuccesfull")
         }
     }
+    const handleClick = ()=>{
+         dispatch(google)
+        // google(dispatch)
+    }
+
   return (
     <div>
         <form onSubmit={handleSubmit}>
@@ -35,6 +46,8 @@ function Login() {
           <input type="text" value={pass} onChange={(e)=>setPass(e.target.value)}/>
           <input type="submit" />
       </form>
+      <h1>{user}</h1>
+      <button onClick={handleClick}>Google</button>
     </div>
   )
 }
